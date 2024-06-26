@@ -1,0 +1,25 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  group_by: [Alertname]
+  group_interval: 30s
+  repeat_interval: 30s
+  receiver: email-me
+receivers:
+- name: email-me
+  email_configs:
+  - send_resolved: true
+    to: receiverUser@protonmail.com
+    from: meUser@gmail.com
+    smarthost: smtp.gmail.com:587
+    auth_username: "meUser@gmail.com"
+    auth_identity: "meUser@gmail.com"
+    auth_password: "gmail app password"
+
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'dev', 'instance']
